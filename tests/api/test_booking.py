@@ -1,7 +1,7 @@
 import requests  # library is sending the requests instead of browser
 from config import USERNAME, PASSWORD, LOGIN_PATH
 
-BASE_URL = "https://restful-booker.herokuapp.com"  #  API address
+BASE_URL = "https://restful-booker.herokuapp.com"  # API address
 
 
 def test_get_booking_ids_returns_200():
@@ -15,7 +15,7 @@ def test_get_booking_ids_returns_200():
     assert response.status_code == 200
 
 
-def test_get_data_from_ping_and_status_201():
+def test_get_data_from_ping_returns_201():
     # Arrange: preconditions
     url = f"{BASE_URL}/ping"
 
@@ -40,7 +40,7 @@ def test_get_booking_ids_returns_not_empty_list():
     assert "bookingid" in first_booking
 
 
-def test_login_success_with_valid_creds():
+def test_login_with_valid_creds_returns_token_with_status_200():
     # Arrange: user login with valid creds
     url = f"{BASE_URL}{LOGIN_PATH}"
     payload = {"username": USERNAME, "password": PASSWORD}

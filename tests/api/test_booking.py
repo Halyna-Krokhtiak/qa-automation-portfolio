@@ -52,3 +52,112 @@ def test_login_with_valid_creds_returns_token_with_status_200():
     # Assert: token is present and status code 200
     assert response.status_code == 200
     assert "token" in body
+
+
+def test_create_booking_returns_bookingid():
+    # Arrange: new booking data
+    url = f"{BASE_URL}/booking"
+    payload = {
+        "firstname": "Test",
+        "lastname": "User",
+        "totalprice": 150,
+        "depositpaid": True,
+        "bookingdates": {"checkin": "2026-11-01", "checkout": "2026-11-05"},
+        "additionalneeds": "Breakfast",
+    }
+    headers = {"Accept": "application/json"}
+
+    # Act sending new booking data
+    response = requests.post(url, json=payload, headers=headers)
+    body = response.json()
+
+    # Assert new booking id is created
+    assert response.status_code == 200
+    assert "bookingid" in body
+    assert body["booking"]["firstname"] == "Test"
+    assert isinstance(body["bookingid"], int)
+
+
+def test_get_booking_by_id_returns_created_booking():
+    # Arrange: new booking data
+    url = f"{BASE_URL}/booking"
+    payload = {
+        "firstname": "Test",
+        "lastname": "User",
+        "totalprice": 150,
+        "depositpaid": True,
+        "bookingdates": {"checkin": "2026-11-01", "checkout": "2026-11-05"},
+        "additionalneeds": "Breakfast",
+    }
+    headers = {"Accept": "application/json"}
+    response = requests.post(url, json=payload, headers=headers)
+    booking_id = response.json()["bookingid"]
+
+    # Act sending new booking id
+    url = f"{BASE_URL}/booking/{booking_id}"
+    response = requests.get(url, headers=headers)
+    body = response.json()
+
+    # Assert new booking shows firstname
+    assert response.status_code == 200
+    assert body["firstname"] == "Test"
+
+
+def test_update_name_for_created_booking():
+    # Arrange: new booking data
+    url = f"{BASE_URL}/booking"
+    payload = {
+        "firstname": "Test",
+        "lastname": "User",
+        "totalprice": 150,
+        "depositpaid": True,
+        "bookingdates": {"checkin": "2026-11-01", "checkout": "2026-11-05"},
+        "additionalneeds": "Breakfast",
+    }
+    headers = {"Accept": "application/json"}
+    response = requests.post(url, json=payload, headers=headers)
+    booking_id = response.json()["bookingid"]
+    auth_payload = {"username": USERNAME, "password": PASSWORD}
+    auth_response = requests.post(f"{BASE_URL}{LOGIN_PATH}", json=auth_payload)
+    token = auth_response.json()["token"]
+    headers = {"Accept": "application/json", "Cookie": f"token={token}"}
+    payload["firstname"] = "Testing"
+
+    # Act sending booking id with changed firtname
+    url = f"{BASE_URL}/booking/{booking_id}"
+    response = requests.put(url, json=payload, headers=headers)
+    body = response.json()
+
+    # Assert firtname is updated
+    assert response.status_code == 200
+    assert body["firstname"] == "Testing"
+
+
+def test_delete_created_booking():
+    # Arrange: new booking data
+    url = f"{BASE_URL}/booking"
+    payload = {
+        "firstname": "Test",
+        "lastname": "User",
+        "totalprice": 150,
+        "depositpaid": True,
+        "bookingdates": {"checkin": "2026-11-01", "checkout": "2026-11-05"},
+        "additionalneeds": "Breakfast",
+    }
+    headers = {"Accept": "application/json"}
+    response = requests.post(url, json=payload, headers=headers)
+    booking_id = response.json()["bookingid"]
+    auth_payload = {"username": USERNAME, "password": PASSWORD}
+    auth_response = requests.post(f"{BASE_URL}{LOGIN_PATH}", json=auth_payload)
+    token = auth_response.json()["token"]
+    headers = {"Accept": "application/json", "Cookie": f"token={token}"}
+
+    # Act deleting new booking id
+    url = f"{BASE_URL}/booking/{booking_id}"
+    response = requests.delete(url, headers=headers)
+
+    # Assert new booking is deleted
+    assert response.status_code == 201
+    get_response = requests.get(url, headers=headers)
+    assert get_response.status_code == 404
+

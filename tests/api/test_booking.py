@@ -123,12 +123,12 @@ def test_update_name_for_created_booking():
     headers = {"Accept": "application/json", "Cookie": f"token={token}"}
     payload["firstname"] = "Testing"
 
-    # Act sending booking id with changed firtname
+    # Act sending booking id with changed firstname
     url = f"{BASE_URL}/booking/{booking_id}"
     response = requests.put(url, json=payload, headers=headers)
     body = response.json()
 
-    # Assert firtname is updated
+    # Assert firstname is updated
     assert response.status_code == 200
     assert body["firstname"] == "Testing"
 
@@ -160,4 +160,3 @@ def test_delete_created_booking():
     assert response.status_code == 201
     get_response = requests.get(url, headers=headers)
     assert get_response.status_code == 404
-

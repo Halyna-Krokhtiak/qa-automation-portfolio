@@ -88,7 +88,7 @@ def test_get_booking_by_id_returns_created_booking(booking_id):
 
 
 def test_update_name_for_created_booking(booking_id, auth_headers):
-    # Arrange: new booking data
+    # Arrange: changing firstname in booking data
     payload = {
         "firstname": "Testing",
         "lastname": "User",
@@ -109,7 +109,6 @@ def test_update_name_for_created_booking(booking_id, auth_headers):
 
 
 def test_delete_created_booking(booking_id, auth_headers):
-
     # Act: deleting new booking id
     url = f"{BASE_URL}/booking/{booking_id}"
     response = requests.delete(url, headers=auth_headers)

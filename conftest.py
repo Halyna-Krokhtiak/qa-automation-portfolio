@@ -31,4 +31,3 @@ def token():
 def auth_headers(token):
     headers = {"Accept": "application/json", "Cookie": f"token={token}"}
     return headers
-

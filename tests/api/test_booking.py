@@ -1,6 +1,12 @@
 import requests  # library is sending the requests instead of browser
-from config import BASE_URL, USERNAME, PASSWORD, LOGIN_PATH
 import pytest
+from config import BASE_URL, USERNAME, PASSWORD, LOGIN_PATH
+
+INVALID_CREDS = [
+    ("admin", "wrong"),
+    ("test", "password123"),
+    ("", ""),
+]
 
 
 def test_get_booking_ids_returns_200():
@@ -128,14 +134,14 @@ def test_get_nonexistent_booking_returns_404(bad_id):
 
 
 @pytest.mark.xfail(reason="Known bug: API returns 200 instead of 401")
-@pytest.mark.parametrize("username, password", [("admin", "wrong"), ("test", "password123"), ("", "")])
+@pytest.mark.parametrize("username, password", INVALID_CREDS)
 def test_login_with_not_valid_creds_returns_401(username, password):
     auth_payload = {"username": username, "password": password}
     auth_response = requests.post(f"{BASE_URL}{LOGIN_PATH}", json=auth_payload)
     assert auth_response.status_code == 401
 
 
-@pytest.mark.parametrize("username, password", [("admin", "wrong"), ("test", "password123"), ("", "")])
+@pytest.mark.parametrize("username, password", INVALID_CREDS)
 def test_login_with_incorrect_creds_returns_200(username, password):
     auth_payload = {"username": username, "password": password}
     auth_response = requests.post(f"{BASE_URL}{LOGIN_PATH}", json=auth_payload)
@@ -158,7 +164,8 @@ def test_update_name_for_created_booking_without_token_returns_403(booking_id):
 
     # Act: sending booking id with changed firstname
     url = f"{BASE_URL}/booking/{booking_id}"
-    response = requests.put(url, json=payload, headers={"Accept": "application/json"})
+    headers = {"Accept": "application/json"}
+    response = requests.put(url, json=payload, headers=headers)
 
     # Assert: status not authorized and firstname is not updated
     assert response.status_code == 403
@@ -166,7 +173,3 @@ def test_update_name_for_created_booking_without_token_returns_403(booking_id):
     assert get_response.status_code == 200
     body = get_response.json()
     assert body["firstname"] == "Test"
-
-
-
-

@@ -1,5 +1,6 @@
 import requests  # library is sending the requests instead of browser
 from config import BASE_URL, USERNAME, PASSWORD, LOGIN_PATH
+import pytest
 
 
 def test_get_booking_ids_returns_200():
@@ -117,3 +118,55 @@ def test_delete_created_booking(booking_id, auth_headers):
     assert response.status_code == 201
     get_response = requests.get(url, headers={"Accept": "application/json"})
     assert get_response.status_code == 404
+
+
+@pytest.mark.parametrize("bad_id", [0, 999999999, "abc"])
+def test_get_nonexistent_booking_returns_404(bad_id):
+    url = f"{BASE_URL}/booking/{bad_id}"
+    response = requests.get(url, headers={"Accept": "application/json"})
+    assert response.status_code == 404
+
+
+@pytest.mark.xfail(reason="Known bug: API returns 200 instead of 401")
+@pytest.mark.parametrize("username, password", [("admin", "wrong"), ("test", "password123"), ("", "")])
+def test_login_with_not_valid_creds_returns_401(username, password):
+    auth_payload = {"username": username, "password": password}
+    auth_response = requests.post(f"{BASE_URL}{LOGIN_PATH}", json=auth_payload)
+    assert auth_response.status_code == 401
+
+
+@pytest.mark.parametrize("username, password", [("admin", "wrong"), ("test", "password123"), ("", "")])
+def test_login_with_incorrect_creds_returns_200(username, password):
+    auth_payload = {"username": username, "password": password}
+    auth_response = requests.post(f"{BASE_URL}{LOGIN_PATH}", json=auth_payload)
+    assert auth_response.status_code == 200
+    body = auth_response.json()
+    assert "token" not in body
+    assert body["reason"] == "Bad credentials"
+
+
+def test_update_name_for_created_booking_without_token_returns_403(booking_id):
+    # Arrange: changing firstname in booking data
+    payload = {
+        "firstname": "Testing",
+        "lastname": "User",
+        "totalprice": 150,
+        "depositpaid": True,
+        "bookingdates": {"checkin": "2026-11-01", "checkout": "2026-11-05"},
+        "additionalneeds": "Breakfast",
+    }
+
+    # Act: sending booking id with changed firstname
+    url = f"{BASE_URL}/booking/{booking_id}"
+    response = requests.put(url, json=payload, headers={"Accept": "application/json"})
+
+    # Assert: status not authorized and firstname is not updated
+    assert response.status_code == 403
+    get_response = requests.get(url, headers={"Accept": "application/json"})
+    assert get_response.status_code == 200
+    body = get_response.json()
+    assert body["firstname"] == "Test"
+
+
+
+

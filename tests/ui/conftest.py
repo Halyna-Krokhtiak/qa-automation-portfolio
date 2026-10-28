@@ -3,6 +3,7 @@ import uuid
 import pytest
 import requests
 from playwright.sync_api import Page
+
 API_URL = "https://automationexercise.com/api"
 
 
@@ -14,7 +15,7 @@ def accept_cookies(page: Page):
     def click_consent():
         consent_button.click()
 
-    # Playwright will close the banner when it apppears in any site page
+    # Playwright will close the banner when it appears in any site page
     page.add_locator_handler(consent_button, click_consent)
 
 

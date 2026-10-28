@@ -3,3 +3,4 @@ requests
 playwright
 pytest-playwright
 pytest-html
+flake8

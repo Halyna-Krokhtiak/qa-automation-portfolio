@@ -7,7 +7,6 @@ class LoginPage(BasePage):
     PATH = "/login"
 
     def __init__(self, page: Page):
-        # Викликаємо __init__ з BasePage, щоб зберегти self.page
         super().__init__(page)
         # locators: page elements for "Login to your account"
         self.email_input = page.locator('[data-qa="login-email"]')

@@ -8,7 +8,7 @@ def test_login_with_unregistered_email(page: Page):
     login_page = LoginPage(page)
     login_page.open()
 
-    # Act: enter non unregistered email
+    # Act: enter unregistered email
     login_page.login("not.registered.user@example.com", "Password123")
 
     # Assert: the error message is displayed
@@ -29,3 +29,13 @@ def test_login_with_empty_password(page: Page):
     assert message != "", "Browser tooltip for empty password was not shown"
 
 
+def test_login_with_valid_credentials(page: Page, registered_user):
+    # Arrange: open the login page
+    login_page = LoginPage(page)
+    login_page.open()
+
+    # Act: log in with the user created via API
+    login_page.login(registered_user["email"], registered_user["password"])
+
+    # Assert: header shows the user's name
+    expect(login_page.logged_in_as).to_contain_text(registered_user["name"])

@@ -14,15 +14,15 @@ def accept_cookies(page: Page):
     def click_consent():
         consent_button.click()
 
-    #  Playwright will close the banner when it apppears in any page of the site
+    # Playwright will close the banner when it apppears in any site page
     page.add_locator_handler(consent_button, click_consent)
+
 
 @pytest.fixture  # create a new user
 def registered_user():
     payload = {
         "name": "Test",
-        "email":
-        f"test_{uuid.uuid4().hex[:8]}@example.com",
+        "email": f"test_{uuid.uuid4().hex[:8]}@example.com",
         "password": "Password123",
         "title": "Mrs",
         "birth_date": 11,

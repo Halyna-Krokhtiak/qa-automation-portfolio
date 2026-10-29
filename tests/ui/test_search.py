@@ -31,8 +31,12 @@ def test_search_shows_searched_products_title(page: Page):
 
 @pytest.mark.parametrize(
     "query, expected",
-    [("blue top", "Blue Top"), ("BLUE TOP", "Blue Top"),
-     ("men tshirt", "Men Tshirt")],)
+    [
+        ("blue top", "Blue Top"),
+        ("BLUE TOP", "Blue Top"),
+        ("men tshirt", "Men Tshirt"),
+    ],
+)
 def test_search_is_case_insensitive(page: Page, query: str, expected: str):
     # Arrange: open the products page
     products_page = ProductsPage(page)
@@ -59,7 +63,7 @@ def test_search_with_unknown_query_shows_no_products(page: Page):
 
 
 @pytest.mark.xfail(
-    reason="Data issue: ""'Little Girls Mr. Panda Shirt' is in Tops category",)
+    reason="Data issue: 'Little Girls Mr. Panda Shirt' is in Tops category",)
 def test_search_results_contain_query(page: Page):
     # Arrange: open the products page
     products_page = ProductsPage(page)

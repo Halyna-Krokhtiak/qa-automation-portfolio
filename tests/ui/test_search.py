@@ -27,3 +27,21 @@ def test_search_shows_searched_products_title(page: Page):
 
     # Assert: search product title is displayed
     expect(products_page.searched_title).to_be_visible()
+
+
+@pytest.mark.parametrize(
+    "query, expected",
+    [("blue top", "Blue Top"),
+     ("BLUE TOP","Blue Top"),
+     ("men tshirt", "Men Tshirt")],
+     )
+def test_search_is_case_insensitive(page: Page, query: str, expected: str):
+    # Arrange: open the products page
+    products_page = ProductsPage(page)
+    products_page.open()
+
+    # Act: search by product name
+    products_page.search(query)
+
+    # Assert: product is found regardless of letter case
+    expect(products_page.product_names).to_contain_text([expected])

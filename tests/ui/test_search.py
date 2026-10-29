@@ -45,3 +45,16 @@ def test_search_is_case_insensitive(page: Page, query: str, expected: str):
 
     # Assert: product is found regardless of letter case
     expect(products_page.product_names).to_contain_text([expected])
+
+
+def test_search_with_unknown_query_shows_no_products(page: Page):
+    # Arrange: open the products page
+    products_page = ProductsPage(page)
+    products_page.open()
+
+    # Act: search by random symbols
+    products_page.search("xyz123")
+
+    # Assert: search results page is shown with no products
+    expect(products_page.searched_title).to_be_visible()
+    expect(products_page.product_names).to_have_count(0)

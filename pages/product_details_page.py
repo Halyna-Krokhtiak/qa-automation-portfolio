@@ -16,6 +16,9 @@ class ProductDetailsPage(BasePage):
         )
         # Link in the "Added!" pop-up
         self.view_cart_link = page.get_by_role("link", name="View Cart")
+        self.continue_shopping_button = page.get_by_role(
+            "button", name="Continue Shopping"
+        )
 
     def open_product(self, product_id: int):
         # open BASE_URL + PATH + id, for example .../product_details/1

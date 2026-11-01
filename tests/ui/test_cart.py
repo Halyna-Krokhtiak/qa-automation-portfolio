@@ -42,3 +42,20 @@ def test_cart_total_depends_on_quantity(page: Page, quantity: int, total: str):
     expect(cart_page.product_quantities).to_have_text(str(quantity))
     expect(cart_page.product_totals).to_have_text(total)
     expect(cart_page.product_prices).to_have_text("Rs. 500")
+
+
+def test_add_two_different_products(page: Page):
+    # Arrange: open Blue Top PDP and add to cart, open Men Tshirt PDP
+    product_page = ProductDetailsPage(page)
+    product_page.open_product(1)
+    product_page.add_to_cart(1)
+    product_page.continue_shopping_button.click()
+    product_page.open_product(2)
+
+    # Act: add Men Tshirt product to the cart and open cart page
+    product_page.add_to_cart(1)
+    product_page.view_cart_link.click()
+
+    # Assert: the cart has Blue Top and Men Tshirt products
+    cart_page = CartPage(page)
+    expect(cart_page.product_names).to_have_text(["Blue Top", "Men Tshirt"])

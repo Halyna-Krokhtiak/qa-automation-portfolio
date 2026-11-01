@@ -13,3 +13,5 @@ class CartPage(BasePage):
         self.product_prices = page.locator(".cart_price p")
         self.product_quantities = page.locator(".cart_quantity button")
         self.product_totals = page.locator(".cart_total_price")
+        self.product_quantity_delete = page.locator(".cart_quantity_delete")
+        self.product_empty_cart = page.get_by_text("Cart is empty!")

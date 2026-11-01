@@ -59,3 +59,19 @@ def test_add_two_different_products(page: Page):
     # Assert: the cart has Blue Top and Men Tshirt products
     cart_page = CartPage(page)
     expect(cart_page.product_names).to_have_text(["Blue Top", "Men Tshirt"])
+
+def test_remove_product_from_cart(page: Page):
+    # Arrange: open the Blue Top PDP and add to cart, go to cart page
+    product_page = ProductDetailsPage(page)
+    product_page.open_product(1)
+    product_page.add_to_cart(1)
+    product_page.view_cart_link.click()
+
+    # Act: remove product from cart page
+    cart_page = CartPage(page)
+    cart_page.product_quantity_delete.click()
+
+    # Assert: the cart page is shown with no products
+    expect(cart_page.product_names).to_have_count(0)
+    expect(cart_page.product_empty_cart).to_be_visible()
+

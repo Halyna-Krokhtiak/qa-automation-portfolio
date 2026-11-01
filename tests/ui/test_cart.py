@@ -75,3 +75,21 @@ def test_remove_product_from_cart(page: Page):
     expect(cart_page.product_names).to_have_count(0)
     expect(cart_page.product_empty_cart).to_be_visible()
 
+
+def test_add_same_product_twice_increases_quantity(page: Page):
+   # Arrange: open the Blue Top PDP and add to cart
+    product_page = ProductDetailsPage(page)
+    product_page.open_product(1)
+    product_page.add_to_cart(1)
+    product_page.continue_shopping_button.click()
+
+    # Act: add Blue Top product to the cart once again
+    product_page.add_to_cart(1)
+    product_page.view_cart_link.click()
+
+    # Assert: the cart has Blue Top product with quantity 2
+    cart_page = CartPage(page)
+    expect(cart_page.product_names).to_have_text("Blue Top")
+    expect(cart_page.product_totals).to_have_text("Rs. 1000")
+    expect(cart_page.product_quantities).to_have_text("2")
+

@@ -19,6 +19,7 @@ def test_add_product_with_quantity(page: Page):
     expect(cart_page.product_names).to_have_text("Blue Top")
     expect(cart_page.product_quantities).to_have_text("4")
 
+
 @pytest.mark.parametrize(
     "quantity, total",
     [
@@ -26,7 +27,6 @@ def test_add_product_with_quantity(page: Page):
         (3, "Rs. 1500")
     ],
 )
-
 def test_cart_total_depends_on_quantity(page: Page, quantity: int, total: str):
     # Arrange: open the Blue Top product page
     product_page = ProductDetailsPage(page)
@@ -60,6 +60,7 @@ def test_add_two_different_products(page: Page):
     cart_page = CartPage(page)
     expect(cart_page.product_names).to_have_text(["Blue Top", "Men Tshirt"])
 
+
 def test_remove_product_from_cart(page: Page):
     # Arrange: open the Blue Top PDP and add to cart, go to cart page
     product_page = ProductDetailsPage(page)
@@ -77,7 +78,7 @@ def test_remove_product_from_cart(page: Page):
 
 
 def test_add_same_product_twice_increases_quantity(page: Page):
-   # Arrange: open the Blue Top PDP and add to cart
+    # Arrange: open the Blue Top PDP and add to cart
     product_page = ProductDetailsPage(page)
     product_page.open_product(1)
     product_page.add_to_cart(1)

@@ -92,4 +92,3 @@ def test_add_same_product_twice_increases_quantity(page: Page):
     expect(cart_page.product_names).to_have_text("Blue Top")
     expect(cart_page.product_totals).to_have_text("Rs. 1000")
     expect(cart_page.product_quantities).to_have_text("2")
-

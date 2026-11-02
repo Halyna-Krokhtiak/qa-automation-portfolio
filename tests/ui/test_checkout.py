@@ -89,3 +89,24 @@ def test_payment_with_empty_card_is_not_placed(page: Page, logged_in_user):
     expect(page).to_have_url(payment_page.BASE_URL + payment_page.PATH)
     message = payment_page.get_name_on_card_validation_message()
     assert message != "", "Browser tooltip for empty Name on Card is not shown"
+
+
+def test_cart_is_empty_after_order(page: Page, logged_in_user):
+    # Arrange: logged in user goes through checkout and pay
+    product_page = ProductDetailsPage(page)
+    product_page.open_product(1)
+    product_page.add_to_cart(1)
+    product_page.view_cart_link.click()
+    cart_page = CartPage(page)
+    cart_page.proceed_to_checkout_button.click()
+    checkout_page = CheckoutPage(page)
+    checkout_page.place_order_link.click()
+    payment_page = PaymentPage(page)
+    payment_page.pay(TEST_CARD)
+
+    # Act: open cart page
+    cart_page.open()
+
+    # Assert: the cart page is shown with no products
+    expect(cart_page.product_names).to_have_count(0)
+    expect(cart_page.product_empty_cart).to_be_visible()

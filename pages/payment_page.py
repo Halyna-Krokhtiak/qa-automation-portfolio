@@ -25,3 +25,6 @@ class PaymentPage(BasePage):
         self.expiry_month_input.fill(card["month"])
         self.expiry_year_input.fill(card["year"])
         self.pay_button.click()
+
+    def get_name_on_card_validation_message(self) -> str:
+        return self.name_on_card_input.evaluate("el => el.validationMessage")

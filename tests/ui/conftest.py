@@ -1,11 +1,11 @@
-from playwright.sync_api import Page, expect
-
-from pages.login_page import LoginPage
-
 import uuid
 
 import pytest
 import requests
+from playwright.sync_api import Page, expect
+
+from pages.login_page import LoginPage
+
 
 API_URL = "https://automationexercise.com/api"
 

@@ -2,7 +2,10 @@ import uuid
 
 import pytest
 import requests
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
+
+from pages.login_page import LoginPage
+
 
 API_URL = "https://automationexercise.com/api"
 
@@ -47,3 +50,13 @@ def registered_user():
         f"{API_URL}/deleteAccount",
         data={"email": payload["email"], "password": payload["password"]},
     )
+
+
+@pytest.fixture
+def logged_in_user(page: Page, registered_user):
+    # Log in through UI with the user created by API
+    login_page = LoginPage(page)
+    login_page.open()
+    login_page.login(registered_user["email"], registered_user["password"])
+    expect(login_page.logged_in_as).to_be_visible()
+    return registered_user

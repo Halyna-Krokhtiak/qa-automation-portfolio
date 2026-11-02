@@ -15,3 +15,9 @@ class CartPage(BasePage):
         self.product_totals = page.locator(".cart_total_price")
         self.product_quantity_delete = page.locator(".cart_quantity_delete")
         self.product_empty_cart = page.get_by_text("Cart is empty!")
+        self.proceed_to_checkout_button = page.get_by_text(
+            "Proceed To Checkout"
+        )
+        self.product_checkout_modal = page.get_by_text(
+            "Register / Login account to proceed on checkout"
+        )

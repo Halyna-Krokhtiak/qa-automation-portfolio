@@ -47,5 +47,24 @@ def test_checkout_shows_user_delivery_address(page: Page, logged_in_user):
 
     # Assert: the delivery address contains Address1 and City
     checkout_page = CheckoutPage(page)
-    expect(checkout_page.delivery_address).to_contain_text(logged_in_user["address1"])
-    expect(checkout_page.delivery_address).to_contain_text(logged_in_user["city"])
+    expect(checkout_page.delivery_address).to_contain_text(
+        logged_in_user["address1"]
+    )
+    expect(checkout_page.delivery_address).to_contain_text(
+        logged_in_user["city"]
+    )
+
+
+def test_guest_checkout_asks_to_login(page: Page):
+    # Arrange: guest user has Blue Top in the cart
+    product_page = ProductDetailsPage(page)
+    product_page.open_product(1)
+    product_page.add_to_cart(1)
+    product_page.view_cart_link.click()
+
+    # Act: go to checkout from cart page
+    cart_page = CartPage(page)
+    cart_page.proceed_to_checkout_button.click()
+
+    # Assert: the checkout modal is displayed
+    expect(cart_page.product_checkout_modal).to_be_visible()

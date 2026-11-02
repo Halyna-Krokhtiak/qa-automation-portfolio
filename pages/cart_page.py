@@ -18,3 +18,6 @@ class CartPage(BasePage):
         self.proceed_to_checkout_button = page.get_by_text(
             "Proceed To Checkout"
         )
+        self.product_checkout_modal = page.get_by_text(
+            "Register / Login account to proceed on checkout"
+        )

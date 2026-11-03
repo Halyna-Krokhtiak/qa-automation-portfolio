@@ -221,3 +221,6 @@ __marimo__/
 
 # Playwright artifacts
 test-results/
+
+# pytest-html reports
+reports/

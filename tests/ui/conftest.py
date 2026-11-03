@@ -1,13 +1,27 @@
+import re
 import uuid
 
 import pytest
 import requests
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page, Route, expect
 
 from pages.login_page import LoginPage
 
 
 API_URL = "https://automationexercise.com/api"
+
+
+# Ad domains: full-screen ads and slow third-party scripts
+AD_DOMAINS = re.compile(r"googlesyndication|doubleclick|googleads|adservice")
+
+
+@pytest.fixture(autouse=True)
+def block_ads(page: Page):
+    # Do not load ads: they slow the site down and cover the page
+    def abort_request(route: Route):
+        route.abort()
+
+    page.route(AD_DOMAINS, abort_request)
 
 
 @pytest.fixture(autouse=True)

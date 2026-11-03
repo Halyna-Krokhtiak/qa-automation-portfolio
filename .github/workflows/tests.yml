@@ -1,0 +1,50 @@
+name: tests                      # workflow name shown in the Actions tab
+
+on:                              # WHEN to run
+  push:
+    branches: [main]             # every push (and merge) to main
+  pull_request:                  # every PR and every new push to a PR branch
+  workflow_dispatch:             # "Run workflow" button for manual runs
+
+jobs:
+  tests:                         # our only job (a set of steps on one machine)
+    runs-on: ubuntu-latest       # a clean Linux virtual machine
+    timeout-minutes: 20          # kill the job if it hangs for 20 minutes
+
+    steps:                       # steps run one by one, top to bottom
+      - name: Checkout code
+        uses: actions/checkout@v4          # download the repo code to the machine (like git clone)
+
+      - name: Set up Python
+        uses: actions/setup-python@v5      # install Python
+        with:
+          python-version: "3.13.15"           # same version as on your laptop
+          cache: pip                       # cache packages so later runs are faster
+
+      - name: Install dependencies
+        run: |                            # run = plain terminal commands
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Playwright browser
+        run: python -m playwright install --with-deps chromium   # browser + Linux system libraries
+
+      - name: Lint
+        run: flake8 .                      # code style check (PEP 8); an error here = red CI
+
+      - name: API tests
+        run: pytest tests/api -v --html=reports/api.html --self-contained-html
+
+      - name: UI tests
+        if: success() || failure()         # run UI tests even if API tests failed
+        run: pytest tests/ui -v --reruns 2 --reruns-delay 5 --html=reports/ui.html --self-contained-html
+
+      - name: Upload reports
+        if: always()                       # ALWAYS upload reports, especially when tests failed
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports               # archive name in the Artifacts section
+          path: |                          # what to put into the archive
+            reports/
+            test-results/
+          retention-days: 14               # how many days GitHub keeps the archive

@@ -4,3 +4,4 @@ playwright
 pytest-playwright
 pytest-html
 flake8
+pytest-rerunfailures

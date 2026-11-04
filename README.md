@@ -70,7 +70,8 @@ pytest --html=reports/report.html --self-contained-html   # with an HTML report
 ## Test reports
 
 - HTML report — add --html=reports/report.html --self-contained-html, then open the file in a browser.
-- Screenshots, videos, traces — saved to test-results/ only for failed tests (configured in pytest.ini). - Traces — open with `playwright show-trace test-results/<test-name>/trace.zip`
+- Screenshots, videos, traces — saved to test-results/ only for failed tests (configured in pytest.ini).
+- Traces — open with `playwright show-trace test-results/<test-name>/trace.zip`
 - In CI — Actions tab → a workflow run → Artifacts → test-reports (contains reports/api.html, reports/ui.html and test-results/). Kept for 14 days.
 
 ## CI

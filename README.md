@@ -2,7 +2,7 @@
 
 ![tests](https://github.com/Halyna-Krokhtiak/qa-automation-portfolio/actions/workflows/tests.yml/badge.svg?branch=main)
 
-Test automation project in Python: UI tests for the automationexercise.com web shop (Playwright + Page Object Model) and API tests for the restful-booker REST API (requests). 43 test cases (25 UI + 18 API), run in GitHub Actions on every push and pull request.
+Test automation project in Python: UI tests for the automationexercise.com web shop (Playwright + Page Object Model) and API tests for the restful-booker REST API (requests). 43 test cases (25 UI + 18 API), run in GitHub Actions on every push and pull request in main.
 
 ## What is tested
 

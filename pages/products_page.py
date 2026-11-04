@@ -18,4 +18,4 @@ class ProductsPage(BasePage):
 
     def search(self, query: str):
         self.search_input.fill(query)
-        self.search_button.click()
+        self.search_buttonq.click()

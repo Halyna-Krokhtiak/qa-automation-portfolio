@@ -170,6 +170,6 @@ def test_update_name_for_created_booking_without_token_returns_403(booking_id):
     # Assert: status not authorized and firstname is not updated
     assert response.status_code == 403
     get_response = requests.get(url, headers={"Accept": "application/json"})
-    assert get_response.status_code == 201
+    assert get_response.status_code == 200
     body = get_response.json()
     assert body["firstname"] == "Test"

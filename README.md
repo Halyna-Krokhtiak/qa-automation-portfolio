@@ -1,6 +1,8 @@
 # qa-automation-portfolio
 UI and API test automation with Python, pytest, Playwright and requests (automationexercise.com, restful-booker)
+
 ![tests](https://github.com/Halyna-Krokhtiak/qa-automation-portfolio/actions/workflows/tests.yml/badge.svg?branch=main)
+
 ## CI
 
 Tests run automatically in GitHub Actions on every pull request and every push to `main`
